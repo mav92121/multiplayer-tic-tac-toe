@@ -7,11 +7,13 @@ const useTicTacToe = () => {
   const initialGrid = [null, null, null, null, null, null, null, null, null];
   const [message, setMessage] = useState<string | null>("Player 1 turn");
   const [grid, setGrid] = useState<(string | null)[]>(initialGrid);
+  const [highlightedCells, setHighlightedCells] = useState<number[]>([]);
   const resetGame = () => {
     setGrid(initialGrid);
     setMessage("Player 1 turn");
     setIsP1Turn(true);
     setIsGameOver(false);
+    setHighlightedCells([]);
   };
   const checkWinner = (grid: (string | null)[]): string | boolean => {
     const winning_patterns = [
@@ -27,6 +29,7 @@ const useTicTacToe = () => {
     for (let i = 0; i < winning_patterns.length; i++) {
       const [a, b, c] = winning_patterns[i];
       if (grid[a] && grid[a] === grid[b] && grid[a] === grid[c]) {
+        setHighlightedCells(() => [a, b, c]);
         return grid[a] === "o" ? "p1" : "p2";
       }
     }
@@ -56,6 +59,14 @@ const useTicTacToe = () => {
       setMessage(() => (isP1Turn ? "Player 2 turn" : "Player 1 turn"));
     }
   };
-  return { handleCellClick, isP1Turn, isGameOver, resetGame, grid, message };
+  return {
+    handleCellClick,
+    isP1Turn,
+    isGameOver,
+    resetGame,
+    grid,
+    message,
+    highlightedCells,
+  };
 };
 export default useTicTacToe;

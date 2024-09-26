@@ -4,8 +4,14 @@ import Cell from "./Cell";
 import useTicTacToe from "@/hooks/useTicTacToe";
 
 const Game = () => {
-  const { grid, resetGame, isGameOver, handleCellClick, message } =
-    useTicTacToe();
+  const {
+    grid,
+    resetGame,
+    isGameOver,
+    handleCellClick,
+    message,
+    highlightedCells,
+  } = useTicTacToe();
   return (
     <div className="text-center p-[40px]">
       <h1 className="text-3xl">Tic Tac Toe</h1>
@@ -21,6 +27,7 @@ const Game = () => {
         <div className="grid grid-cols-3 gap-3 mt-4">
           {grid.map((arr, index) => (
             <Cell
+              isHighlighted={highlightedCells.includes(index)}
               key={index}
               index={index}
               disabled={isGameOver || arr !== null}
