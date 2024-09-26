@@ -14,37 +14,21 @@ const useTicTacToe = () => {
     setIsGameOver(false);
   };
   const checkWinner = (grid: (string | null)[]): string | boolean => {
-    if (grid[0] !== null && grid[0] == grid[1] && grid[1] == grid[2]) {
-      if (grid[0] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[3] !== null && grid[3] == grid[4] && grid[4] == grid[5]) {
-      if (grid[3] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[6] !== null && grid[6] == grid[7] && grid[7] == grid[8]) {
-      if (grid[6] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[0] !== null && grid[0] == grid[3] && grid[3] == grid[6]) {
-      if (grid[0] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[1] !== null && grid[1] == grid[4] && grid[4] == grid[7]) {
-      if (grid[1] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[2] !== null && grid[2] == grid[5] && grid[8] == grid[2]) {
-      if (grid[2] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[0] !== null && grid[4] == grid[0] && grid[4] == grid[8]) {
-      if (grid[0] == "o") return "p1";
-      else return "p2";
-    }
-    if (grid[2] !== null && grid[2] == grid[4] && grid[2] == grid[6]) {
-      if (grid[6] == "o") return "p1";
-      else return "p2";
+    const winning_patterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < winning_patterns.length; i++) {
+      const [a, b, c] = winning_patterns[i];
+      if (grid[a] && grid[a] === grid[b] && grid[a] === grid[c]) {
+        return grid[a] === "o" ? "p1" : "p2";
+      }
     }
     let hasNull = false;
     grid.map((ele: string | null) => {
