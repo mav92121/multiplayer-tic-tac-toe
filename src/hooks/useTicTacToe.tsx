@@ -62,9 +62,11 @@ const useTicTacToe = () => {
   return {
     handleCellClick,
     isP1Turn,
+    setIsP1Turn,
     isGameOver,
     resetGame,
     grid,
+    setGrid,
     message,
     highlightedCells,
   };

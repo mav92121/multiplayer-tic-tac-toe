@@ -13,19 +13,32 @@ const Game = () => {
     handleCellClick,
     message,
     highlightedCells,
+    isP1Turn,
+    setIsP1Turn,
+    setGrid,
   } = useTicTacToe();
 
   const [userName, setUserName] = useState<null | string>(null);
   const [opponentName, setOpponentName] = useState<string>("");
   const [socket, setSocket] = useState<typeof Socket | null>(null);
+  const [currUser, setCurrUser] = useState<string>("");
 
   socket?.on("connect", () => {
     console.log("id ", socket.id);
   });
 
-  socket?.on("opponent_found", (opponent: string) => {
-    setOpponentName(opponent);
+  socket?.on("opponent_found", (opponent: any) => {
+    setOpponentName(opponent.name);
+    setCurrUser(() => {
+      if (opponent.isP1) return "p2";
+      return "p1";
+    });
     console.log("opponent is ", opponent);
+  });
+
+  socket?.on("moveFromServer", (data: any) => {
+    setGrid(data.grid);
+    setIsP1Turn(data.isP1Turn);
   });
 
   const handlePlayOnline = (name: string) => {
@@ -65,10 +78,16 @@ const Game = () => {
         <div className="grid grid-cols-3 gap-3 mt-4">
           {grid.map((arr, index) => (
             <Cell
+              socket={socket}
               isHighlighted={highlightedCells.includes(index)}
               key={index}
               index={index}
-              disabled={isGameOver || arr !== null}
+              disabled={
+                isGameOver ||
+                arr !== null ||
+                (isP1Turn && currUser === "p2") ||
+                (!isP1Turn && currUser === "p1")
+              }
               val={arr}
               handleCellClick={handleCellClick}
             />

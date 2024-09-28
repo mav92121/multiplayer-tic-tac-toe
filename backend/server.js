@@ -37,8 +37,25 @@ io.on("connection", (socket) => {
     }
 
     if (opponentPlayer) {
-      currUser.socket.emit("opponent_found", opponentPlayer.name);
-      opponentPlayer.socket.emit("opponent_found", currUser.name);
+      currUser.socket.emit("opponent_found", {
+        name: opponentPlayer.name,
+        isP1: true,
+      });
+      opponentPlayer.socket.emit("opponent_found", {
+        name: currUser.name,
+        isP1: false,
+      });
+
+      currUser.socket.on("moveFromClient", (grid) => {
+        console.log(" cli curr ", grid);
+        opponentPlayer.socket.emit("moveFromServer", { grid, isP1: false });
+      });
+
+      opponentPlayer.socket.on("moveFromClient", (grid) => {
+        console.log(" cli opp ", grid);
+        currUser.socket.emit("moveFromServer", { grid, isP1: true });
+      });
+
       console.log("opponentPlayer found -> ", opponentPlayer);
     } else {
       console.log("opponenet not found");
